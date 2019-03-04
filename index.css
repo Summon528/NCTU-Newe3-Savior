@@ -1,0 +1,29 @@
+.layer2_right_current_course_stu_link {
+    text-align: unset !important;
+}
+
+.layer2_left_caption{
+    margin: 16px;
+}
+
+.layer2_right_current_course_stu_link > .course-link {
+    margin: 4px;
+}
+
+.e3ext-ann-contanier {
+    width: 100%;
+}
+
+.e3ext-ann-contanier tr:hover {
+    background-color: #f1ddff;
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+}
+
+.block_course_list {
+    display: none !important;
+}
+
+#region-main>.card {
+    min-height: unset !important;
+}

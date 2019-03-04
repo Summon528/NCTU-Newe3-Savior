@@ -1,0 +1,28 @@
+{
+    "name": "Make New e3 great again",
+    "version": "1.0",
+    "description": "Make New e3 great again",
+    "manifest_version": 2,
+    "content_scripts": [
+        {
+            "matches": [
+                "https://e3new.nctu.edu.tw/*"
+            ],
+            "js": [
+                "dist/main.js"
+            ],
+            "css": [
+                "index.css"
+            ],
+            "run_at": "document_end"
+        },
+        {
+            "matches": [
+                "https://e3new.nctu.edu.tw/my/*"
+            ],
+            "js": [
+                "dist/my.js"
+            ]
+        }
+    ]
+}
