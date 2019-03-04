@@ -4,15 +4,18 @@
   "main": "index.js",
   "license": "GPL-3.0",
   "dependencies": {
-    "@types/micromodal": "^0.3.0",
-    "micromodal": "^0.3.2",
-    "typescript": "^3.3.3333"
+    "micromodal": "^0.3.2"
   },
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w"
+    "build": "webpack --mode production",
+    "watch": "webpack --watch --progress --mode development"
   },
   "devDependencies": {
-    "tslint": "^5.13.1"
+    "@types/micromodal": "^0.3.0",
+    "ts-loader": "^5.3.3",
+    "tslint": "^5.13.1",
+    "typescript": "^3.3.3333",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.2.3"
   }
 }

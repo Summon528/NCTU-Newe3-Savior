@@ -9,7 +9,7 @@
                 "https://e3new.nctu.edu.tw/*"
             ],
             "js": [
-                "dist/main.js"
+                "dist/hide_loading.js"
             ],
             "css": [
                 "index.css"
@@ -21,7 +21,7 @@
                 "https://e3new.nctu.edu.tw/my/*"
             ],
             "js": [
-                "dist/my.js"
+                "dist/index.js"
             ]
         }
     ]
