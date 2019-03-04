@@ -3,6 +3,9 @@
     "version": "1.0",
     "description": "Make New e3 great again",
     "manifest_version": 2,
+    "web_accessible_resources": [
+        "dist/loading.svg"
+    ],
     "content_scripts": [
         {
             "matches": [
@@ -10,9 +13,6 @@
             ],
             "js": [
                 "dist/hide_loading.js"
-            ],
-            "css": [
-                "index.css"
             ],
             "run_at": "document_end"
         },
@@ -22,6 +22,9 @@
             ],
             "js": [
                 "dist/index.js"
+            ],
+            "css": [
+                "dist/index.css"
             ]
         }
     ]

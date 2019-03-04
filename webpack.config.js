@@ -4,7 +4,7 @@ module.exports = {
     devtool: 'inline-source-map',
     entry: {
         'index': './src/index.ts',
-        'hide_loading': './src/hide_loading'
+        'hide_loading': './src/hide_loading',
     },
     module: {
         rules: [

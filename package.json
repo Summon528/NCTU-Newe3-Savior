@@ -4,13 +4,15 @@
   "main": "index.js",
   "license": "GPL-3.0",
   "dependencies": {
-    "micromodal": "^0.3.2"
+    "micromodal": "^0.3.2",
+    "moment": "^2.24.0"
   },
   "scripts": {
     "build": "webpack --mode production",
     "watch": "webpack --watch --progress --mode development"
   },
   "devDependencies": {
+    "@types/chrome": "^0.0.81",
     "@types/micromodal": "^0.3.0",
     "ts-loader": "^5.3.3",
     "tslint": "^5.13.1",

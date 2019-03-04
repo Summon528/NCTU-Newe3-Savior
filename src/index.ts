@@ -1,4 +1,28 @@
-const isEN = document.getElementsByClassName("header-en")[0].classList.contains("semi-transparent");
+import MicroModal from "micromodal";
+import moment, { Moment } from "moment";
+
+const isEN = document.getElementsByClassName("header-tw")[0].classList.contains("semi-transparent");
+
+const body = document.querySelector("body");
+body!.innerHTML += `
+<div class="modal micromodal-slide" id="e3ext-modal" aria-hidden="true">
+<div class="modal__overlay" tabindex="-1" data-micromodal-close>
+  <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="e3ext-modal-title">
+    <header class="modal__header">
+        <h2 class="modal__title" id="e3ext-modal-title"></h2>
+        <span>
+            <a href="" id="e3ext-modal-link">${isEN ? "Link" : "連結"}</a>
+            <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+        </span>
+    </header>
+    <div class="e3ext-modal-loading-container" id="e3ext-modal-loading">
+        <img class="e3ext-modal-loading-svg" src="${chrome.runtime.getURL("dist/loading.svg")}">
+    </div>
+    <main class ="modal__content;" id="e3ext-modal-content"></main>
+   </div>
+ </div>
+ </div>
+`;
 
 function clearCourseName(name: string | null) {
     if (name === null) { return ""; }
@@ -8,33 +32,74 @@ function clearCourseName(name: string | null) {
         return name;
     }
     if (isEN) {
-        return match[1].trim();
-    } else {
         return match[2].trim();
+    } else {
+        return match[1].trim();
     }
 }
 
-function fetchAnn() {
+function parseDate(dateStr: string | null) {
+    if (dateStr === null) { return moment(); }
+    let date = moment(dateStr, "MM月 D日,HH:mm");
+    if (!date.isValid()) {
+        date = moment(dateStr, "DD MMM, HH:mm");
+    }
+    if (!date.isValid()) {
+        date = moment();
+    }
+    const now = moment();
+    const curMonth = now.month();
+    const curYear = now.year();
+
+    if (curMonth >= 7 && date.month() <= 1) {
+        date.set("year", curYear + 1);
+    } else if (curMonth <= 6 && date.month() >= 7) {
+        date.set("year", curYear - 1);
+    }
+    return date;
+}
+
+function fetchNews() {
+    const rightLayerEl = document.getElementById("layer2_right_current_course_stu")!;
+    rightLayerEl.innerHTML = "";
+    const loadingSvgContainer = document.createElement("div");
+    loadingSvgContainer.style.height = "100%";
+    loadingSvgContainer.id = "e3ext-news-loading-svg-container";
+    const loadingSvg = document.createElement("img");
+    loadingSvg.src = chrome.runtime.getURL("dist/loading.svg");
+    loadingSvg.className = "e3ext-news-loading-svg";
+    loadingSvgContainer.appendChild(loadingSvg);
+    rightLayerEl.appendChild(loadingSvgContainer);
+
     fetch("https://e3new.nctu.edu.tw/theme/dcpc/news/index.php").then((res) => {
         res.text().then((data) => {
             const dataEl = document.createElement("html");
             dataEl.innerHTML = data;
-            parseAnn(dataEl);
+            parseNews(dataEl);
         });
     });
 }
 
-function parseAnn(data: HTMLElement) {
-    const news = data.querySelectorAll(".NewsRow > .News-passive, .News-active");
-    document.getElementById("layer2_right_current_course_stu")!.innerHTML = "";
+class News {
+    constructor(
+        public course: string,
+        public title: string,
+        public date: Moment,
+        public dateStr: string,
+        public link: string) { }
+}
 
+function parseNews(data: HTMLElement) {
+    const newsEls = data.querySelectorAll(".NewsRow > .News-passive, .News-active");
+    const rightLayerEl = document.getElementById("layer2_right_current_course_stu")!;
     const container = document.createElement("table");
-    container.className = "e3ext-ann-contanier";
+    container.className = "e3ext-news-contanier";
 
-    document.getElementById("layer2_right_current_course_stu")!.appendChild(container);
-    news.forEach((el) => {
-        // const linkRegex = /location\.href='(.*)';/;
-        // const link = linkRegex.exec(el.getAttribute("onClick")!)![1];
+    rightLayerEl.appendChild(container);
+    const news: News[] = [];
+    newsEls.forEach((el) => {
+        const linkRegex = /location\.href='(.*)';/;
+        const link = linkRegex.exec(el.getAttribute("onClick")!)![1];
 
         const courseEl = el.getElementsByClassName("colL-10")[0];
         let course = courseEl.getAttribute("title") === "" ?
@@ -46,23 +111,63 @@ function parseAnn(data: HTMLElement) {
             titleEl.textContent : titleEl.getAttribute("title");
 
         const date = el.getElementsByClassName("colR-10")[0].textContent;
+        news.push(new News(course, title!, parseDate(date), date!, link));
+    });
 
+    news.sort((n1, n2) => n2.date.valueOf() - n1.date.valueOf());
+    document.getElementById("e3ext-news-loading-svg-container")!.style.display = "none";
+    news.forEach((news1) => {
+        const { course, title, dateStr, link } = news1;
         const tr = document.createElement("tr");
-        [course, title, date].forEach((info) => {
+        [course, title, dateStr].forEach((info) => {
             const td = document.createElement("td");
             td.textContent = info;
             tr.appendChild(td);
         });
+        tr.setAttribute("e3ext-link", link);
+        tr.addEventListener("click", showNewsModal);
         container.appendChild(tr);
     });
 }
 
-fetchAnn();
+function showNewsModal(e: MouseEvent) {
+    document.getElementById("e3ext-modal-loading")!.style.display = "block";
+    document.getElementById("e3ext-modal-content")!.innerHTML = "";
+    MicroModal.show("e3ext-modal");
+    const targetEl = (e.currentTarget as HTMLTableRowElement);
+    const title = targetEl.children[1].textContent;
+    const link = targetEl.getAttribute("e3ext-link");
+    document.getElementById("e3ext-modal-title")!.textContent = title;
+    (document.getElementById("e3ext-modal-link") as HTMLAnchorElement)!.href = link!;
+    fetch(link!).then((res) => {
+        res.text().then((data) => {
+            document.getElementById("e3ext-modal-loading")!.style.display = "none";
+            const dataEl = document.createElement("html");
+            dataEl.innerHTML = data;
+            document.getElementById("e3ext-modal-content")!.innerHTML =
+                dataEl.querySelector(".maincontent")!.innerHTML +
+                dataEl.querySelector(".options")!.innerHTML;
+        });
+    });
+}
 
-document.querySelectorAll("#layer2_right_current_course_stu > \
+function swapCourseListPos() {
+    const buttons = document.querySelectorAll(".btn2018_sp");
+
+    document.querySelectorAll("#layer2_right_current_course_stu > \
     .layer2_right_current_course_stu_link > a").forEach((node) => {
-    node.textContent = clearCourseName(node.textContent);
-});
+        node.textContent = clearCourseName(node.textContent);
+    });
 
-document.getElementsByClassName("layer2_left")[0].innerHTML =
-    document.getElementById("layer2_right_current_course_stu")!.innerHTML;
+    document.getElementsByClassName("layer2_left")[0].innerHTML =
+        document.getElementById("layer2_right_current_course_stu")!.innerHTML;
+
+    buttons.forEach((button) => {
+        document.getElementsByClassName("layer2_left")[0].appendChild(button.cloneNode(true));
+    });
+
+}
+
+swapCourseListPos();
+fetchNews();
+MicroModal.init();
