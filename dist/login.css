@@ -1,0 +1,48 @@
+.loginCard {
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%);
+}
+
+.bkOval-1000 {
+    position: fixed !important;
+    height: 100% !important;
+}
+
+.bkOval-900 {
+    position: fixed !important;
+    height: 100% !important;
+    top: 0 !important;
+    right: 0 !important;
+    left: unset !important;
+}
+
+.bkOval-85 {
+    position: fixed !important;
+    left: 80% !important;
+}
+
+.bkOval-100 {
+    position: fixed !important;
+    left: calc(80% - 40px) !important;
+}
+
+.bkOval-200 {
+    position: fixed !important;
+    left: 20% !important;
+    z-index: 2 !important;
+}
+
+div[role=main] > .row > div > .card {
+    display: none !important;
+}
+
+.LoginFoot {
+    bottom: 0 !important;
+    position: fixed !important;
+    top: unset !important;
+}
+
+.LoginFoot-phone {
+    display: none !important;
+}

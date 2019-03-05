@@ -96,11 +96,23 @@ class News {
 function parseNews(data: HTMLElement) {
     const newsEls = data.querySelectorAll(".NewsRow > .News-passive, .News-active");
     const rightLayerEl = document.getElementById("layer2_right_current_course_stu")!;
+    const caption = document.createElement("div");
+    caption.textContent = isEN ? "Announcements" : "公告";
+    caption.className = "layer2_left_caption";
+    rightLayerEl.appendChild(caption);
 
-    const container = document.createElement("table");
-    container.className = "e3ext-news-contanier";
+    const stupidBr = document.querySelector(".layer2_right > br");
+    if (stupidBr !== null) {
+        stupidBr.remove();
+    }
 
-    rightLayerEl.appendChild(container);
+    const contanier = document.createElement("div");
+    const table = document.createElement("table");
+    contanier.appendChild(table);
+    contanier.className = "e3ext-news-contanier";
+    table.className = "e3ext-news-table";
+
+    rightLayerEl.appendChild(contanier);
     const news: News[] = [];
     newsEls.forEach((el) => {
         const linkRegex = /location\.href='(.*)';/;
@@ -135,7 +147,7 @@ function parseNews(data: HTMLElement) {
         });
         if (link) { tr.setAttribute("e3ext-link", link); }
         tr.addEventListener("click", showNewsModal);
-        container.appendChild(tr);
+        table.appendChild(tr);
     });
 }
 
