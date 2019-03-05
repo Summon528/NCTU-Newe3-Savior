@@ -6,6 +6,7 @@ module.exports = {
     entry: {
         'index': './src/index.ts',
         'hide_loading': './src/hide_loading',
+        'background': './src/background',
     },
     module: {
         rules: [

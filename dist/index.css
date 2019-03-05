@@ -80,6 +80,14 @@
     width: 100%;
 }
 
+.e3ext-news-contanier td {
+    padding: 8px 0 8px 0;
+}
+
+.e3ext-news-contanier td:first-child {
+    padding-left: 8px;
+}
+
 .e3ext-news-contanier tr:hover {
     background-color: #f1ddff;
     cursor: pointer;

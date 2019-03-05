@@ -1,12 +1,22 @@
 {
     "name": "NCTU 新e3救星",
     "short_name": "NCTU Newe3 Savior",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "description": "Make New e3 great again",
     "manifest_version": 2,
     "web_accessible_resources": [
         "dist/loading.svg"
     ],
+    "permissions": [
+        "webRequest",
+        "webRequestBlocking",
+        "https://e3new.nctu.edu.tw/*"
+    ],
+    "background": {
+        "scripts": [
+            "dist/background.js"
+        ]
+    },
     "content_scripts": [
         {
             "matches": [
@@ -15,7 +25,7 @@
             "js": [
                 "dist/hide_loading.js"
             ],
-            "run_at": "document_end"
+            "run_at": "document_start"
         },
         {
             "matches": [
