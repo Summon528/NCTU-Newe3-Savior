@@ -46,7 +46,7 @@
 }
 
 .layer2_right {
-    width: calc(75% - 24px);
+    width: calc(75% - 24px) !important;
 }
 
 .btn2018_spplc {
