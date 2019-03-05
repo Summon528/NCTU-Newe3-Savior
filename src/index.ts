@@ -178,10 +178,17 @@ function showNewsModal(e: MouseEvent) {
 function swapCourseListPos() {
     const buttons = document.querySelectorAll(".btn2018_sp");
 
+    const ulEl = document.createElement("ul");
+    ulEl.className = "e3ext-course-list-ul";
     document.querySelectorAll("#layer2_right_current_course_stu > \
     .layer2_right_current_course_stu_link > a").forEach((node) => {
+        const liEl = document.createElement("li");
         node.textContent = clearCourseName(node.textContent);
+        liEl.appendChild(node);
+        ulEl.appendChild(liEl);
     });
+
+    const captionEl = document.querySelector("#layer2_right_current_course_stu > .layer2_left_caption");
 
     const leftLayerEl = document.querySelector(".layer2_left");
     const rightLayerEl = document.getElementById("layer2_right_current_course_stu");
@@ -191,11 +198,17 @@ function swapCourseListPos() {
         return;
     }
 
-    leftLayerEl.innerHTML = rightLayerEl.innerHTML;
+    leftLayerEl.innerHTML = "";
+    if (captionEl !== null) {
+        leftLayerEl.appendChild(captionEl);
+    }
+    leftLayerEl.appendChild(ulEl);
 
+    const superContainer = document.createElement("div");
     const container = document.createElement("div");
     container.className = "e3ext-buttons-contanier";
-    leftLayerEl.appendChild(container);
+    superContainer.appendChild(container);
+    leftLayerEl.appendChild(superContainer);
 
     buttons.forEach((button) => {
         container.appendChild(button.cloneNode(true));
@@ -265,7 +278,19 @@ function toggleCourseList() {
     }
 }
 
+function hideTaButtonIfNotTa() {
+
+    const taEl = document.getElementById("layer2_right_current_course_tea");
+    if (taEl && taEl.childElementCount === 1) {
+        const btn = document.getElementById("btn_dcpc_current_course_tea");
+        if (btn !== null) {
+            btn.style.display = "none";
+        }
+    }
+}
+
 swapCourseListPos();
 setUpCourseListButton();
 fetchNews();
+hideTaButtonIfNotTa();
 MicroModal.init();

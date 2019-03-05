@@ -16,11 +16,6 @@
     max-height: unset !important;
 }
 
-.course-link {
-    padding-left: 4px;
-    padding-right: 4px;
-}
-
 .course-link:hover {
     color: unset !important;
     background-color: #f1ddff !important;
@@ -41,7 +36,8 @@
 
 .layer2_left {
     margin-left: 0 !important;
-    overflow: auto;
+    display: flex !important;
+    flex-direction: column;
 }
 
 .layer2_right {
@@ -72,7 +68,6 @@
     display: flex;
     align-content: space-around;
     flex-wrap: wrap;
-    margin-top: 12px;
 }
 
 .e3ext-news-contanier {
@@ -91,6 +86,11 @@
 
 .e3ext-news-table td:first-child {
     padding-left: 8px;
+}
+
+.e3ext-news-table td:last-child {
+    padding-right: 8px;
+    white-space: nowrap;
 }
 
 .e3ext-news-table tr:hover {
@@ -121,6 +121,10 @@
 .e3ext-modal-loading-svg {
     display: block;
     margin: auto;
+}
+
+.e3ext-course-list-ul {
+    overflow: auto;
 }
 
 .e3ext-course-list-btn {
