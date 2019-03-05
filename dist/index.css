@@ -1,5 +1,6 @@
 .layer2_right_current_course_stu_link {
     text-align: unset !important;
+    margin: 2px 4px 2px 4px;
 }
 
 .layer2_left_caption{
@@ -7,7 +8,7 @@
 }
 
 .layer2_right_current_course_stu_link > .course-link {
-    margin: 4px;
+    padding: 0 !important;
 }
 
 #layer2_right_current_course_stu {
@@ -40,6 +41,7 @@
 
 .layer2_left {
     margin-left: 0 !important;
+    overflow: auto;
 }
 
 .layer2_right {
