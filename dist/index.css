@@ -35,6 +35,20 @@
     
 }
 
+#region-main-box > .row {
+    width: 100%;
+    margin-left: unset !important;
+    margin-right: unset !important;
+}
+
+.layer2_left {
+    margin-left: 0 !important;
+}
+
+.layer2_right {
+    width: calc(75% - 24px);
+}
+
 .btn2018_spplc {
     top: 0px !important;
     padding: 0 12px 0 12px;
