@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
     devtool: 'inline-source-map',
@@ -21,5 +22,8 @@ module.exports = {
     output: {
         filename: '[name].js',
         path: path.resolve(__dirname, 'dist')
-    }
+    },
+    plugins: [
+        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    ],
 };

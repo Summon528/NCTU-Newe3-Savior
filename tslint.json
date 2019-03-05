@@ -1,5 +1,10 @@
 {
     "extends": "tslint:recommended",
+    "rules": {
+        "no-console": [
+            "log"
+        ]
+    },
     "include": [
         "src/**/*"
     ]

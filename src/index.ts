@@ -10,7 +10,7 @@ body!.innerHTML += `
   <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="e3ext-modal-title">
     <header class="modal__header">
         <h2 class="modal__title" id="e3ext-modal-title"></h2>
-        <span>
+        <span class="modal__topright">
             <a href="" id="e3ext-modal-link">${isEN ? "Link" : "連結"}</a>
             <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
         </span>
@@ -60,7 +60,12 @@ function parseDate(dateStr: string | null) {
 }
 
 function fetchNews() {
-    const rightLayerEl = document.getElementById("layer2_right_current_course_stu")!;
+    const rightLayerEl = document.getElementById("layer2_right_current_course_stu");
+    if (rightLayerEl === null) {
+        console.error("#layer2_right_current_course_stu is null");
+        return;
+    }
+
     rightLayerEl.innerHTML = "";
     const loadingSvgContainer = document.createElement("div");
     loadingSvgContainer.style.height = "100%";
@@ -85,13 +90,13 @@ class News {
         public course: string,
         public title: string,
         public date: Moment,
-        public dateStr: string,
-        public link: string) { }
+        public link: string | undefined) { }
 }
 
 function parseNews(data: HTMLElement) {
     const newsEls = data.querySelectorAll(".NewsRow > .News-passive, .News-active");
     const rightLayerEl = document.getElementById("layer2_right_current_course_stu")!;
+
     const container = document.createElement("table");
     container.className = "e3ext-news-contanier";
 
@@ -99,8 +104,11 @@ function parseNews(data: HTMLElement) {
     const news: News[] = [];
     newsEls.forEach((el) => {
         const linkRegex = /location\.href='(.*)';/;
-        const link = linkRegex.exec(el.getAttribute("onClick")!)![1];
-
+        const match = linkRegex.exec(el.getAttribute("onClick") || "");
+        let link: string | undefined;
+        if (match !== null) {
+            link = match[1];
+        }
         const courseEl = el.getElementsByClassName("colL-10")[0];
         let course = courseEl.getAttribute("title") === "" ?
             courseEl.textContent : courseEl.getAttribute("title");
@@ -111,20 +119,21 @@ function parseNews(data: HTMLElement) {
             titleEl.textContent : titleEl.getAttribute("title");
 
         const date = el.getElementsByClassName("colR-10")[0].textContent;
-        news.push(new News(course, title!, parseDate(date), date!, link));
+        news.push(new News(course, title || "", parseDate(date), link));
     });
 
     news.sort((n1, n2) => n2.date.valueOf() - n1.date.valueOf());
     document.getElementById("e3ext-news-loading-svg-container")!.style.display = "none";
     news.forEach((news1) => {
-        const { course, title, dateStr, link } = news1;
+        const { course, title, date, link } = news1;
+        const dateStr = date.format("MM/DD HH:mm");
         const tr = document.createElement("tr");
         [course, title, dateStr].forEach((info) => {
             const td = document.createElement("td");
             td.textContent = info;
             tr.appendChild(td);
         });
-        tr.setAttribute("e3ext-link", link);
+        if (link) { tr.setAttribute("e3ext-link", link); }
         tr.addEventListener("click", showNewsModal);
         container.appendChild(tr);
     });
@@ -133,20 +142,23 @@ function parseNews(data: HTMLElement) {
 function showNewsModal(e: MouseEvent) {
     document.getElementById("e3ext-modal-loading")!.style.display = "block";
     document.getElementById("e3ext-modal-content")!.innerHTML = "";
-    MicroModal.show("e3ext-modal");
     const targetEl = (e.currentTarget as HTMLTableRowElement);
     const title = targetEl.children[1].textContent;
     const link = targetEl.getAttribute("e3ext-link");
     document.getElementById("e3ext-modal-title")!.textContent = title;
     (document.getElementById("e3ext-modal-link") as HTMLAnchorElement)!.href = link!;
+    if (!link) { return; }
+    MicroModal.show("e3ext-modal");
     fetch(link!).then((res) => {
         res.text().then((data) => {
             document.getElementById("e3ext-modal-loading")!.style.display = "none";
             const dataEl = document.createElement("html");
             dataEl.innerHTML = data;
+            const mainContentEl = dataEl.querySelector(".maincontent");
+            const optionsEl = dataEl.querySelector(".options");
             document.getElementById("e3ext-modal-content")!.innerHTML =
-                dataEl.querySelector(".maincontent")!.innerHTML +
-                dataEl.querySelector(".options")!.innerHTML;
+                (mainContentEl ? mainContentEl.innerHTML : "") +
+                (optionsEl ? optionsEl.innerHTML : "");
         });
     });
 }
@@ -159,15 +171,89 @@ function swapCourseListPos() {
         node.textContent = clearCourseName(node.textContent);
     });
 
-    document.getElementsByClassName("layer2_left")[0].innerHTML =
-        document.getElementById("layer2_right_current_course_stu")!.innerHTML;
+    const leftLayerEl = document.querySelector(".layer2_left");
+    const rightLayerEl = document.getElementById("layer2_right_current_course_stu");
+
+    if (leftLayerEl === null || rightLayerEl === null) {
+        console.error(".layer2_left or #layer2_right_current_course_stu is null");
+        return;
+    }
+
+    leftLayerEl.innerHTML = rightLayerEl.innerHTML;
+
+    const container = document.createElement("div");
+    container.className = "e3ext-buttons-contanier";
+    leftLayerEl.appendChild(container);
 
     buttons.forEach((button) => {
-        document.getElementsByClassName("layer2_left")[0].appendChild(button.cloneNode(true));
+        container.appendChild(button.cloneNode(true));
     });
 
+    const newsButton = document.createElement("div");
+    newsButton.classList.add("btn2018_sp");
+    newsButton.classList.add("btn2018_spplc");
+    newsButton.addEventListener("click", showNewsLayer);
+    newsButton.id = "e3ext-news-btn";
+    const newsCaption = document.createElement("div");
+    newsCaption.textContent = isEN ? "News" : "公告";
+    newsCaption.className = "btn2018_sp_caption";
+    newsButton.appendChild(newsCaption);
+    container.appendChild(newsButton);
+}
+
+function showNewsLayer() {
+    const newsLayerEl = document.getElementById("layer2_right_current_course_stu");
+    if (newsLayerEl === null) {
+        console.error("layer2_right_current_course_stu is null");
+        return;
+    }
+    const otherLayers = [];
+    otherLayers.push(document.getElementById("layer2_right_current_course_tea"));
+    otherLayers.push(document.getElementById("layer2_right_school_resource"));
+    otherLayers.push(document.getElementById("layer2_right_cal"));
+    otherLayers.forEach((layer) => {
+        if (layer) {
+            layer.setAttribute("hidden", "hidden");
+        }
+    });
+    newsLayerEl.removeAttribute("hidden");
+    newsLayerEl.style.display = "block";
+}
+
+function setUpCourseListButton() {
+    const courseListEl = (document.querySelector(".block_course_list") as HTMLDivElement | null);
+    if (courseListEl === null) {
+        console.error(".block_course_list is null");
+        return;
+    }
+    courseListEl.style.display = "none";
+    const courseListButton = document.createElement("div");
+    courseListButton.classList.add("btn2018_sp");
+    courseListButton.classList.add("btn2018_spplc");
+    courseListButton.classList.add("e3ext-course-list-btn");
+    courseListButton.addEventListener("click", toggleCourseList);
+    const courseListCaption = document.createElement("div");
+    courseListCaption.textContent = isEN ? "My courses" : "我的課程";
+    courseListCaption.className = "btn2018_sp_caption";
+    courseListButton.appendChild(courseListCaption);
+    const bottomBlock =
+        document.querySelector("#region-main > .card-block > div[role=main] > #block-region-content");
+    if (bottomBlock) {
+        bottomBlock.insertBefore(courseListButton, document.querySelector(".block_course_list"));
+    }
+}
+
+function toggleCourseList() {
+    const courseListEl = (document.querySelector(".block_course_list") as HTMLDivElement | null);
+    if (courseListEl === null) { return; }
+    if (courseListEl.style.display === "none") {
+        courseListEl.style.display = "block";
+    } else {
+        courseListEl.style.display = "none";
+    }
 }
 
 swapCourseListPos();
+setUpCourseListButton();
 fetchNews();
 MicroModal.init();

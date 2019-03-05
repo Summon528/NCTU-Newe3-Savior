@@ -30,10 +30,6 @@
     transition: background-color 0.1s ease;
 }
 
-.block_course_list {
-    display: none !important;
-}
-
 #region-main>.card {
     min-height: unset !important;
     
@@ -41,10 +37,29 @@
 
 .btn2018_spplc {
     top: 0px !important;
+    padding: 0 12px 0 12px;
 }
 
 .btn2018_sp {
-    height: 50px !important;
+    height: 46px !important;
+    display: inline-block;
+    left: 0px !important;
+    font-size: unset !important;
+    width: unset !important;
+    margin: 0 8px 8px 8px;
+    margin-top: unset !important;
+    flex-grow: 1;
+}
+
+.btn2018_sp_caption {
+    font-size: unset !important;
+}
+
+.e3ext-buttons-contanier {
+    display: flex;
+    align-content: space-around;
+    flex-wrap: wrap;
+    margin-top: 12px;
 }
 
 .e3ext-news-contanier {
@@ -79,6 +94,17 @@
 .e3ext-modal-loading-svg {
     display: block;
     margin: auto;
+}
+
+.e3ext-course-list-btn {
+    float: right;
+    z-index: 100;
+}
+
+@media only screen and (max-width: 767px) and (min-width: 10px) {
+    #e3ext-news-btn {
+        display: none;
+    }
 }
 
 .modal__overlay {
@@ -122,9 +148,12 @@
 .modal__close {
     background: transparent;
     border: 0;
-    margin-left: 8px;
 }
   
+.modal__topright {
+    margin-left: 12px;
+}
+
 .modal__header .modal__close:before { content: "\2715"; }
   
 .modal__content {
