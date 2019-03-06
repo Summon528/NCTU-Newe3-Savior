@@ -6,12 +6,14 @@
 
 .bkOval-1000 {
     position: fixed !important;
+    width: 70% !important;
     height: 100% !important;
 }
 
 .bkOval-900 {
     position: fixed !important;
     height: 100% !important;
+    width: 50% !important;
     top: 0 !important;
     right: 0 !important;
     left: unset !important;
@@ -29,6 +31,7 @@
 
 .bkOval-200 {
     position: fixed !important;
+    top: 85% !important;
     left: 20% !important;
     z-index: 2 !important;
 }

@@ -214,35 +214,6 @@ function swapCourseListPos() {
         container.appendChild(button.cloneNode(true));
     });
 
-    const newsButton = document.createElement("div");
-    newsButton.classList.add("btn2018_sp");
-    newsButton.classList.add("btn2018_spplc");
-    newsButton.addEventListener("click", showNewsLayer);
-    newsButton.id = "e3ext-news-btn";
-    const newsCaption = document.createElement("div");
-    newsCaption.textContent = isEN ? "News" : "公告";
-    newsCaption.className = "btn2018_sp_caption";
-    newsButton.appendChild(newsCaption);
-    container.appendChild(newsButton);
-}
-
-function showNewsLayer() {
-    const newsLayerEl = document.getElementById("layer2_right_current_course_stu");
-    if (newsLayerEl === null) {
-        console.error("layer2_right_current_course_stu is null");
-        return;
-    }
-    const otherLayers = [];
-    otherLayers.push(document.getElementById("layer2_right_current_course_tea"));
-    otherLayers.push(document.getElementById("layer2_right_school_resource"));
-    otherLayers.push(document.getElementById("layer2_right_cal"));
-    otherLayers.forEach((layer) => {
-        if (layer) {
-            layer.setAttribute("hidden", "hidden");
-        }
-    });
-    newsLayerEl.removeAttribute("hidden");
-    newsLayerEl.style.display = "block";
 }
 
 function setUpCourseListButton() {
@@ -278,19 +249,7 @@ function toggleCourseList() {
     }
 }
 
-function hideTaButtonIfNotTa() {
-
-    const taEl = document.getElementById("layer2_right_current_course_tea");
-    if (taEl && taEl.childElementCount === 1) {
-        const btn = document.getElementById("btn_dcpc_current_course_tea");
-        if (btn !== null) {
-            btn.style.display = "none";
-        }
-    }
-}
-
 swapCourseListPos();
 setUpCourseListButton();
 fetchNews();
-hideTaButtonIfNotTa();
 MicroModal.init();
