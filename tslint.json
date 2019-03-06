@@ -2,7 +2,12 @@
     "extends": "tslint:recommended",
     "rules": {
         "no-console": [
-            "log"
+            true,
+            {
+                "allow": [
+                    "error"
+                ]
+            }
         ]
     },
     "include": [

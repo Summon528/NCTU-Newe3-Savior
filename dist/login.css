@@ -1,7 +1,8 @@
-.loginCard {
+.LoginCard {
     top: 50% !important;
     left: 50% !important;
     transform: translate(-50%, -50%);
+    margin: 0px 0 64px 0;
 }
 
 .bkOval-1000 {

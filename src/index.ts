@@ -162,6 +162,10 @@ function showNewsModal(e: MouseEvent) {
     if (!link) { return; }
     MicroModal.show("e3ext-modal");
     fetch(link!).then((res) => {
+        if (res.redirected) {
+            window.location.replace(res.url);
+            return;
+        }
         res.text().then((data) => {
             document.getElementById("e3ext-modal-loading")!.style.display = "none";
             const dataEl = document.createElement("html");
