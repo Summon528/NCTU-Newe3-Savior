@@ -132,6 +132,28 @@
     z-index: 100;
 }
 
+
+.e3ext-course-list-ul::-webkit-scrollbar,
+.e3ext-news-contanier::-webkit-scrollbar {
+    width:5px;
+    border-radius:5px;
+    background-color:transparent
+}
+.e3ext-course-list-ul::-webkit-scrollbar-track,
+.e3ext-news-contanier::-webkit-scrollbar-track {
+    border-radius:5px;
+    background-color:#eaeaea
+}
+.e3ext-course-list-ul::-webkit-scrollbar-thumb,
+.e3ext-news-contanier::-webkit-scrollbar-thumb {
+    border-radius:5px;
+    background-color:#6800b2
+}
+.e3ext-course-list-ul::-webkit-scrollbar-thumb:hover,
+.e3ext-news-contanier::-webkit-scrollbar-thumb:hover {
+    border-radius:5px
+}
+
 body.e3ext-no-scroll {
     width: 100%;
     position: fixed;
