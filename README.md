@@ -1,5 +1,7 @@
+<img align="right" src="https://developer.chrome.com/webstore/images/ChromeWebStore_Badge_v2_340x96.png" href="https://chrome.google.com/webstore/detail/nctu-%E6%96%B0e3%E6%95%91%E6%98%9F/eefhoknfalkinfipjbhiohlgjflkbeik?hl=zh-TW">
+
 # NCTU 新e3 救星
-## 根據自己喜好修改的新e3
+### 根據自己喜好修改的新e3
 
 ## 主要修改點如下
 - 登入頁面樣式修改
