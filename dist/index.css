@@ -25,7 +25,6 @@
 
 #region-main>.card {
     min-height: unset !important;
-    
 }
 
 #region-main-box > .row {
@@ -125,11 +124,18 @@
 
 .e3ext-course-list-ul {
     overflow: auto;
+    margin-left: 12px;
 }
 
 .e3ext-course-list-btn {
     float: right;
     z-index: 100;
+}
+
+body.e3ext-no-scroll {
+    width: 100%;
+    position: fixed;
+    overflow-y: scroll;
 }
 
 @media only screen and (max-width: 960px) {

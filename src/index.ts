@@ -1,7 +1,11 @@
 import MicroModal from "micromodal";
 import moment, { Moment } from "moment";
 
-const isEN = document.getElementsByClassName("header-tw")[0].classList.contains("semi-transparent");
+const headerTw = document.querySelector(".header-tw");
+let isEN = false;
+if (headerTw !== null) {
+    isEN = headerTw.classList.contains("semi-transparent");
+}
 
 const body = document.querySelector("body");
 body!.innerHTML += `
@@ -160,8 +164,17 @@ function showNewsModal(e: MouseEvent) {
     document.getElementById("e3ext-modal-title")!.textContent = title;
     (document.getElementById("e3ext-modal-link") as HTMLAnchorElement)!.href = link!;
     if (!link) { return; }
-    MicroModal.show("e3ext-modal");
-    fetch(link!).then((res) => {
+    const controller = new AbortController();
+    MicroModal.show("e3ext-modal", {
+        awaitCloseAnimation: true,
+        disableFocus: true,
+        onClose: () => {
+            document.body.classList.remove("e3ext-no-scroll");
+            controller.abort();
+        },
+    });
+    document.body.classList.add("e3ext-no-scroll");
+    fetch(link!, { signal: controller.signal }).then((res) => {
         if (res.redirected) {
             window.location.replace(res.url);
             return;
@@ -256,27 +269,35 @@ function toggleCourseList() {
 function setUpAJAXCal() {
     const next: HTMLAnchorElement | null = document.querySelector(".arrow_link.next");
     const prev: HTMLAnchorElement | null = document.querySelector(".arrow_link.previous");
+    [prev, next].filter((el) => el !== null).forEach((el) =>
+        el!.addEventListener("click", fetchCal),
+    );
+}
+
+let calController: AbortController | undefined;
+function fetchCal(e: MouseEvent) {
     const cal: HTMLDivElement | null = document.querySelector("#layer2_right_cal");
     if (cal === null) { return; }
-    [prev, next].filter((el) => el !== null).forEach((el) =>
-        el!.addEventListener("click", (e) => {
-            e.preventDefault();
-            const targetEl = e.currentTarget as HTMLAnchorElement;
-            fetch(targetEl.href).then((res) => {
-                res.text().then((data) => {
-                    const dataEl = document.createElement("html");
-                    dataEl.innerHTML = data;
-                    const newCal = dataEl.querySelector("#layer2_right_cal");
-                    cal.innerHTML = newCal!.innerHTML;
-                    setUpAJAXCal();
-                });
-            });
-        }),
-    );
+    if (calController) { calController.abort(); }
+    e.preventDefault();
+    const targetEl = e.currentTarget as HTMLAnchorElement;
+    calController = new AbortController();
+    fetch(targetEl.href, { signal: calController.signal }).then((res) => {
+        if (res.redirected) {
+            window.location.replace(res.url);
+            return;
+        }
+        res.text().then((data) => {
+            const dataEl = document.createElement("html");
+            dataEl.innerHTML = data;
+            const newCal = dataEl.querySelector("#layer2_right_cal");
+            cal.innerHTML = newCal!.innerHTML;
+            setUpAJAXCal();
+        });
+    });
 }
 
 swapCourseListPos();
 setUpCourseListButton();
 fetchNews();
 setUpAJAXCal();
-MicroModal.init();
