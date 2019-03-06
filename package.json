@@ -9,11 +9,13 @@
   },
   "scripts": {
     "build": "webpack --mode production",
-    "watch": "webpack --watch --progress --mode development"
+    "watch": "webpack --watch --progress --mode development",
+    "dist": "yarn build && node dist.js"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.81",
     "@types/micromodal": "^0.3.0",
+    "archiver": "^3.0.0",
     "ts-loader": "^5.3.3",
     "tslint": "^5.13.1",
     "typescript": "^3.3.3333",
