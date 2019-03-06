@@ -253,7 +253,30 @@ function toggleCourseList() {
     }
 }
 
+function setUpAJAXCal() {
+    const next: HTMLAnchorElement | null = document.querySelector(".arrow_link.next");
+    const prev: HTMLAnchorElement | null = document.querySelector(".arrow_link.previous");
+    const cal: HTMLDivElement | null = document.querySelector("#layer2_right_cal");
+    if (cal === null) { return; }
+    [prev, next].filter((el) => el !== null).forEach((el) =>
+        el!.addEventListener("click", (e) => {
+            e.preventDefault();
+            const targetEl = e.currentTarget as HTMLAnchorElement;
+            fetch(targetEl.href).then((res) => {
+                res.text().then((data) => {
+                    const dataEl = document.createElement("html");
+                    dataEl.innerHTML = data;
+                    const newCal = dataEl.querySelector("#layer2_right_cal");
+                    cal.innerHTML = newCal!.innerHTML;
+                    setUpAJAXCal();
+                });
+            });
+        }),
+    );
+}
+
 swapCourseListPos();
 setUpCourseListButton();
 fetchNews();
+setUpAJAXCal();
 MicroModal.init();
