@@ -1,7 +1,7 @@
 {
     "name": "NCTU 新e3救星",
     "short_name": "NCTU Newe3 Savior",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "description": "Make New e3 great again",
     "manifest_version": 2,
     "web_accessible_resources": [
@@ -40,7 +40,7 @@
         },
         {
             "matches": [
-                "https://e3new.nctu.edu.tw/login/index.php*"
+                "https://e3new.nctu.edu.tw/login/*"
             ],
             "css": [
                 "dist/login.css"

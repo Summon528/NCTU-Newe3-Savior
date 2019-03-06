@@ -6,11 +6,10 @@ chrome.webRequest.onBeforeRequest.addListener((details) => {
 
 let desiredLocation: Map<number, string> = new Map();
 chrome.webRequest.onHeadersReceived.addListener((details) => {
-    console.log(details);
     const path = new URL(details.url).pathname;
     if (details.statusCode === 303
         && path !== "/"
-        && path !== "/login/index.php"
+        && !path.startsWith("/login")
         && details.responseHeaders) {
         for (const header of details.responseHeaders) {
             if (header.name === "Location" && header.value &&

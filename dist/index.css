@@ -132,7 +132,7 @@
     z-index: 100;
 }
 
-@media only screen and (max-width: 767px) and (min-width: 10px) {
+@media only screen and (max-width: 960px) {
     #e3ext-news-btn {
         display: none;
     }
