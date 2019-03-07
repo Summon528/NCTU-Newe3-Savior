@@ -181,10 +181,10 @@ function showNewsModal(e: MouseEvent) {
         res.text().then((data) => {
             document.getElementById("e3ext-modal-loading")!.style.display = "none";
             const dataEl = new DOMParser().parseFromString(data, "text/html");
-            const mainContentEl = dataEl.querySelector(".maincontent");
+            const contentEl = dataEl.querySelector(".content");
             const optionsEl = dataEl.querySelector(".options");
             const modalContent = document.getElementById("e3ext-modal-content")!;
-            if (mainContentEl) { modalContent.appendChild(mainContentEl); }
+            if (contentEl) { modalContent.appendChild(contentEl); }
             if (optionsEl) { modalContent.appendChild(optionsEl); }
         });
     });
