@@ -82,8 +82,7 @@ function fetchNews() {
 
     fetch("https://e3new.nctu.edu.tw/theme/dcpc/news/index.php").then((res) => {
         res.text().then((data) => {
-            const dataEl = document.createElement("html");
-            dataEl.innerHTML = data;
+            const dataEl = new DOMParser().parseFromString(data, "text/html");
             parseNews(dataEl);
         });
     });
@@ -97,7 +96,7 @@ class News {
         public link: string | undefined) { }
 }
 
-function parseNews(data: HTMLElement) {
+function parseNews(data: Document) {
     const newsEls = data.querySelectorAll(".NewsRow > .News-passive, .News-active");
     const rightLayerEl = document.getElementById("layer2_right_current_course_stu")!;
     const caption = document.createElement("div");
@@ -181,13 +180,12 @@ function showNewsModal(e: MouseEvent) {
         }
         res.text().then((data) => {
             document.getElementById("e3ext-modal-loading")!.style.display = "none";
-            const dataEl = document.createElement("html");
-            dataEl.innerHTML = data;
+            const dataEl = new DOMParser().parseFromString(data, "text/html");
             const mainContentEl = dataEl.querySelector(".maincontent");
             const optionsEl = dataEl.querySelector(".options");
-            document.getElementById("e3ext-modal-content")!.innerHTML =
-                (mainContentEl ? mainContentEl.innerHTML : "") +
-                (optionsEl ? optionsEl.innerHTML : "");
+            const modalContent = document.getElementById("e3ext-modal-content")!;
+            if (mainContentEl) { modalContent.appendChild(mainContentEl); }
+            if (optionsEl) { modalContent.appendChild(optionsEl); }
         });
     });
 }
@@ -288,11 +286,13 @@ function fetchCal(e: MouseEvent) {
             return;
         }
         res.text().then((data) => {
-            const dataEl = document.createElement("html");
-            dataEl.innerHTML = data;
-            const newCal = dataEl.querySelector("#layer2_right_cal");
-            cal.innerHTML = newCal!.innerHTML;
-            setUpAJAXCal();
+            const dataEl = new DOMParser().parseFromString(data, "text/html");
+            const newCal: HTMLDivElement | null = dataEl.querySelector("#layer2_right_cal");
+            if (newCal != null) {
+                newCal.style.display = "block";
+                cal.replaceWith(newCal);
+                setUpAJAXCal();
+            }
         });
     });
 }
