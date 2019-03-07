@@ -161,8 +161,8 @@ function showNewsModal(e: MouseEvent) {
     const title = targetEl.children[1].textContent;
     const link = targetEl.getAttribute("e3ext-link");
     document.getElementById("e3ext-modal-title")!.textContent = title;
-    (document.getElementById("e3ext-modal-link") as HTMLAnchorElement)!.href = link!;
     if (!link) { return; }
+    (document.getElementById("e3ext-modal-link") as HTMLAnchorElement)!.href = link;
     const controller = new AbortController();
     MicroModal.show("e3ext-modal", {
         awaitCloseAnimation: true,
