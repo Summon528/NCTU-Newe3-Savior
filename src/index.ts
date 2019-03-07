@@ -164,14 +164,19 @@ function showNewsModal(e: MouseEvent) {
     if (!link) { return; }
     (document.getElementById("e3ext-modal-link") as HTMLAnchorElement)!.href = link;
     const controller = new AbortController();
+    const scrollTop = document.scrollingElement ? document.scrollingElement.scrollTop : 0;
     MicroModal.show("e3ext-modal", {
         awaitCloseAnimation: true,
         disableFocus: true,
         onClose: () => {
             document.body.classList.remove("e3ext-no-scroll");
+            if (document.scrollingElement) {
+                document.scrollingElement.scrollTo(0, scrollTop);
+            }
             controller.abort();
         },
     });
+    document.body.style.top = `-${scrollTop}px`;
     document.body.classList.add("e3ext-no-scroll");
     fetch(link!, { signal: controller.signal }).then((res) => {
         if (res.redirected) {
