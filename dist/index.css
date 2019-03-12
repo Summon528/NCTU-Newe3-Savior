@@ -1,46 +1,48 @@
-.layer2_right_current_course_stu_link {
-    text-align: unset !important;
-    margin: 2px 4px 2px 4px;
-}
+@media screen and (min-width: 960px) {
+    .layer2_right_current_course_stu_link {
+        text-align: unset !important;
+        margin: 2px 4px 2px 4px;
+    }
 
-.layer2_left_caption{
-    margin: 16px;
-}
+    .layer2_left_caption{
+        margin: 16px;
+    }
 
-.layer2_right_current_course_stu_link > .course-link {
-    padding: 0 !important;
-}
+    .layer2_right_current_course_stu_link > .course-link {
+        padding: 0 !important;
+    }
 
-#layer2_right_current_course_stu {
-    height: 100%;
-    max-height: unset !important;
-}
+    #layer2_right_current_course_stu {
+        height: 100%;
+        max-height: unset !important;
+    }
 
-.course-link:hover {
-    color: unset !important;
-    background-color: #f1ddff !important;
-    border-radius: unset !important;
-    transition: background-color 0.1s ease;
-}
+    .course-link:hover {
+        color: unset !important;
+        background-color: #f1ddff !important;
+        border-radius: unset !important;
+        transition: background-color 0.1s ease;
+    }
 
-#region-main>.card {
-    min-height: unset !important;
-}
+    #region-main>.card {
+        min-height: unset !important;
+    }
 
-#region-main-box > .row {
-    width: 100%;
-    margin-left: unset !important;
-    margin-right: unset !important;
-}
+    #region-main-box > .row {
+        width: 100%;
+        margin-left: unset !important;
+        margin-right: unset !important;
+    }
 
-.layer2_left {
-    margin-left: 0 !important;
-    display: flex !important;
-    flex-direction: column;
-}
+    .layer2_left {
+        margin-left: 0 !important;
+        display: flex !important;
+        flex-direction: column;
+    }
 
-.layer2_right {
-    width: calc(75% - 24px) !important;
+    .layer2_right {
+        width: calc(75% - 24px) !important;
+    }
 }
 
 .btn2018_spplc {
