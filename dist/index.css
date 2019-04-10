@@ -43,6 +43,10 @@
     .layer2_right {
         width: calc(75% - 24px) !important;
     }
+
+    .block_dcpc_news {
+        display: none !important;
+    }
 }
 
 .btn2018_spplc {
