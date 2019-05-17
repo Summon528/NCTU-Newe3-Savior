@@ -86,7 +86,7 @@
 }
 
 .e3ext-news-table td {
-    padding: 8px 0 8px 0;
+    padding: 8px 4px 8px 4px;
 }
 
 .e3ext-news-table td:first-child {
@@ -270,6 +270,10 @@ from { transform: translateY(15%); }
 
 .micromodal-slide[aria-hidden="true"] .modal__container {
     animation: mmslideOut .3s cubic-bezier(0, 0, .2, 1);
+}
+
+.micromodal-slide .modal__container {
+    max-width: 80vw;
 }
 
 .micromodal-slide .modal__container,
