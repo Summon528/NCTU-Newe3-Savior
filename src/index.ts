@@ -1,3 +1,4 @@
+import linkifyElement from "linkifyjs/element";
 import MicroModal from "micromodal";
 import moment, { Moment } from "moment";
 
@@ -189,7 +190,10 @@ function showNewsModal(e: MouseEvent) {
             const contentEl = dataEl.querySelector(".content");
             const optionsEl = dataEl.querySelector(".options");
             const modalContent = document.getElementById("e3ext-modal-content")!;
-            if (contentEl) { modalContent.appendChild(contentEl); }
+            if (contentEl) {
+                linkifyElement(contentEl);
+                modalContent.appendChild(contentEl);
+            }
             if (optionsEl) { modalContent.appendChild(optionsEl); }
         });
     });
