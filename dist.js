@@ -28,5 +28,6 @@ archive.on('error', function (err) {
 archive.pipe(output);
 
 archive.file('manifest.json', { name: 'manifest.json' });
+archive.file('icon.png', { name: 'icon.png' });
 archive.directory('dist/', 'dist');
 archive.finalize();
