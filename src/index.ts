@@ -187,7 +187,7 @@ function showNewsModal(e: MouseEvent) {
         res.text().then((data) => {
             document.getElementById("e3ext-modal-loading")!.style.display = "none";
             const dataEl = new DOMParser().parseFromString(data, "text/html");
-            const contentEl = dataEl.querySelector(".content");
+            const contentEl = dataEl.querySelector(".content") as HTMLElement;
             const optionsEl = dataEl.querySelector(".options");
             const modalContent = document.getElementById("e3ext-modal-content")!;
             if (contentEl) {
