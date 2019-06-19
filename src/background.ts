@@ -28,3 +28,15 @@ chrome.webRequest.onBeforeRequest.addListener((details) => {
     }
     return {};
 }, { urls: ["https://e3new.nctu.edu.tw/my/"] }, ["blocking"]);
+
+chrome.cookies.onChanged.addListener((changeInfo) => {
+    if (changeInfo.cookie.name === "MoodleSession") {
+        chrome.cookies.set({
+            expirationDate: Math.floor(Date.now() / 1000) + 86400,
+            name: changeInfo.cookie.name,
+            path: changeInfo.cookie.path,
+            url: "https://e3new.nctu.edu.tw",
+            value: changeInfo.cookie.value,
+        });
+    }
+});
