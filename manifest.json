@@ -32,15 +32,6 @@
         },
         {
             "matches": [
-                "https://e3new.nctu.edu.tw/login/index.php"
-            ],
-            "js": [
-                "dist/login.js"
-            ],
-            "run_at": "document_end"
-        },
-        {
-            "matches": [
                 "https://e3new.nctu.edu.tw/my/*"
             ],
             "js": [
