@@ -19,7 +19,7 @@
 
     .course-link:hover {
         color: unset !important;
-        background-color: #f1ddff !important;
+        background-color: #dfe7f5 !important;
         border-radius: unset !important;
         transition: background-color 0.1s ease;
     }
@@ -99,7 +99,7 @@
 }
 
 .e3ext-news-table tr:hover {
-    background-color: #f1ddff;
+    background-color: #dfe7f5;
     cursor: pointer;
     transition: background-color 0.1s ease;
 }
@@ -107,7 +107,7 @@
 .e3ext-modal {
     display: none;
 }
-  
+
 .e3ext-modal.is-open {
     display: block;
 }
@@ -148,12 +148,12 @@
 .e3ext-course-list-ul::-webkit-scrollbar-track,
 .e3ext-news-contanier::-webkit-scrollbar-track {
     border-radius:5px;
-    background-color:#eaeaea
+    background-color:#dfe7f5
 }
 .e3ext-course-list-ul::-webkit-scrollbar-thumb,
 .e3ext-news-contanier::-webkit-scrollbar-thumb {
     border-radius:5px;
-    background-color:#6800b2
+    background-color:rgba(25,78,176,1)
 }
 .e3ext-course-list-ul::-webkit-scrollbar-thumb:hover,
 .e3ext-news-contanier::-webkit-scrollbar-thumb:hover {
@@ -192,7 +192,7 @@ body.e3ext-no-scroll {
     overflow-y: auto;
     box-sizing: border-box;
 }
-  
+
 .modal__header {
     display: flex;
     justify-content: space-between;
@@ -206,7 +206,7 @@ body.e3ext-no-scroll {
     font-weight: 600;
     font-size: 1.25rem;
     line-height: 1.25;
-    color: #6800b2;
+    color: rgba(25,78,176,1);
     box-sizing: border-box;
 }
 
@@ -214,20 +214,20 @@ body.e3ext-no-scroll {
     background: transparent;
     border: 0;
 }
-  
+
 .modal__topright {
     margin-left: 12px;
 }
 
 .modal__header .modal__close:before { content: "\2715"; }
-  
+
 .modal__content {
     margin-top: 2rem;
     margin-bottom: 2rem;
     line-height: 1.5;
     color: rgba(0,0,0,.8);
 }
-  
+
 @keyframes mmfadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
