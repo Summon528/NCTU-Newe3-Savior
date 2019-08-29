@@ -12,13 +12,9 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - name: install, lint, build
-      run: |
-        yarn install
-        npx tslint --project tsconfig.json
-        yarn dist
-      env:
-        CI: true
+    - run: yarn install
+    - run: npx tslint --project tsconfig.json
+    - run: yarn dist
     - uses: actions/upload-artifact@master
       with:
         name: dist
