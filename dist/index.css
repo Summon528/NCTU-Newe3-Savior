@@ -19,7 +19,7 @@
 
     .course-link:hover {
         color: unset !important;
-        background-color: #dfe7f5 !important;
+        background-color: #e3f2fd !important;
         border-radius: unset !important;
         transition: background-color 0.1s ease;
     }
@@ -99,7 +99,7 @@
 }
 
 .e3ext-news-table tr:hover {
-    background-color: #dfe7f5;
+    background-color: #e3f2fd;
     cursor: pointer;
     transition: background-color 0.1s ease;
 }
@@ -148,7 +148,7 @@
 .e3ext-course-list-ul::-webkit-scrollbar-track,
 .e3ext-news-contanier::-webkit-scrollbar-track {
     border-radius:5px;
-    background-color:#dfe7f5
+    background-color:#e3f2fd
 }
 .e3ext-course-list-ul::-webkit-scrollbar-thumb,
 .e3ext-news-contanier::-webkit-scrollbar-thumb {
