@@ -52,15 +52,6 @@ function parseDate(dateStr: string | null) {
     if (!date.isValid()) {
         date = moment();
     }
-    const now = moment();
-    const curMonth = now.month();
-    const curYear = now.year();
-
-    if (curMonth >= 7 && date.month() <= 1) {
-        date.set("year", curYear + 1);
-    } else if (curMonth <= 6 && date.month() >= 7) {
-        date.set("year", curYear - 1);
-    }
     return date;
 }
 
@@ -117,7 +108,7 @@ function parseNews(data: Document) {
     table.className = "e3ext-news-table";
 
     rightLayerEl.appendChild(contanier);
-    const news: News[] = [];
+    const importantNews: News[] = [], normalNews: News[] = [];
     newsEls.forEach((el) => {
         const linkRegex = /location\.href='(.*)';/;
         const match = linkRegex.exec(el.getAttribute("onClick") || "");
@@ -135,9 +126,30 @@ function parseNews(data: Document) {
             titleEl.textContent : titleEl.getAttribute("title");
 
         const date = el.getElementsByClassName("colR-10")[0].textContent;
-        news.push(new News(course, title || "", parseDate(date), link));
+
+        const tempNews = new News(course, title || "", parseDate(date), link);
+        const iconEl: HTMLImageElement | null = el.querySelector('img');
+        if (iconEl && iconEl.src === "https://e3new.nctu.edu.tw/theme/dcpc/images/Bell_grey_75x75.png") {
+            importantNews.push(tempNews);
+        } else {
+            normalNews.push(tempNews);
+        }
+
     });
 
+    const guessYear = (news: News[]) => {
+        let lastDate = moment();
+        for (const n of news) {
+            while (n.date.isAfter(lastDate)) {
+                n.date.set('year', n.date.get('year') - 1);
+            }
+            lastDate = n.date;
+        }
+    }
+
+    guessYear(importantNews);
+    guessYear(normalNews);
+    const news = ([] as News[]).concat(importantNews, normalNews);
     news.sort((n1, n2) => n2.date.valueOf() - n1.date.valueOf());
     document.getElementById("e3ext-news-loading-svg-container")!.style.display = "none";
     news.forEach((news1) => {
@@ -235,42 +247,18 @@ function swapCourseListPos() {
     leftLayerEl.appendChild(superContainer);
 
     buttons.forEach((button) => {
-        container.appendChild(button.cloneNode(true));
+        const newBtn = button.cloneNode(true) as HTMLDivElement;
+        const captionEl = newBtn.querySelector('.btn2018_sp_caption');
+        if (captionEl === null || captionEl.textContent === null) {
+            console.error(".btn2018_sp_caption is null");
+            return;
+        }
+        if (captionEl.textContent.replace(/\s/g, "") === "當期課程") {
+            captionEl.textContent = "公告";
+        }
+        container.appendChild(newBtn);
     });
 
-}
-
-function setUpCourseListButton() {
-    const courseListEl = (document.querySelector(".block_course_list") as HTMLDivElement | null);
-    if (courseListEl === null) {
-        console.error(".block_course_list is null");
-        return;
-    }
-    courseListEl.style.display = "none";
-    const courseListButton = document.createElement("div");
-    courseListButton.classList.add("btn2018_sp");
-    courseListButton.classList.add("btn2018_spplc");
-    courseListButton.classList.add("e3ext-course-list-btn");
-    courseListButton.addEventListener("click", toggleCourseList);
-    const courseListCaption = document.createElement("div");
-    courseListCaption.textContent = isEN ? "My courses" : "我的課程";
-    courseListCaption.className = "btn2018_sp_caption";
-    courseListButton.appendChild(courseListCaption);
-    const bottomBlock =
-        document.querySelector("#region-main > .card-block > div[role=main] > #block-region-content");
-    if (bottomBlock) {
-        bottomBlock.insertBefore(courseListButton, document.querySelector(".block_course_list"));
-    }
-}
-
-function toggleCourseList() {
-    const courseListEl = (document.querySelector(".block_course_list") as HTMLDivElement | null);
-    if (courseListEl === null) { return; }
-    if (courseListEl.style.display === "none") {
-        courseListEl.style.display = "block";
-    } else {
-        courseListEl.style.display = "none";
-    }
 }
 
 function setUpAJAXCal() {
@@ -307,6 +295,5 @@ function fetchCal(e: MouseEvent) {
 }
 
 swapCourseListPos();
-setUpCourseListButton();
 fetchNews();
 setUpAJAXCal();
