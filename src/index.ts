@@ -108,7 +108,8 @@ function parseNews(data: Document) {
     table.className = "e3ext-news-table";
 
     rightLayerEl.appendChild(contanier);
-    const importantNews: News[] = [], normalNews: News[] = [];
+    const importantNews: News[] = [];
+    const normalNews: News[] = [];
     newsEls.forEach((el) => {
         const linkRegex = /location\.href='(.*)';/;
         const match = linkRegex.exec(el.getAttribute("onClick") || "");
@@ -128,7 +129,7 @@ function parseNews(data: Document) {
         const date = el.getElementsByClassName("colR-10")[0].textContent;
 
         const tempNews = new News(course, title || "", parseDate(date), link);
-        const iconEl: HTMLImageElement | null = el.querySelector('img');
+        const iconEl: HTMLImageElement | null = el.querySelector("img");
         if (iconEl && iconEl.src === "https://e3new.nctu.edu.tw/theme/dcpc/images/Bell_grey_75x75.png") {
             importantNews.push(tempNews);
         } else {
@@ -141,18 +142,18 @@ function parseNews(data: Document) {
         let lastDate = moment();
         for (const n of news) {
             while (n.date.isAfter(lastDate)) {
-                n.date.set('year', n.date.get('year') - 1);
+                n.date.set("year", n.date.get("year") - 1);
             }
             lastDate = n.date;
         }
-    }
+    };
 
     guessYear(importantNews);
     guessYear(normalNews);
-    const news = ([] as News[]).concat(importantNews, normalNews);
-    news.sort((n1, n2) => n2.date.valueOf() - n1.date.valueOf());
+    const allNews = ([] as News[]).concat(importantNews, normalNews);
+    allNews.sort((n1, n2) => n2.date.valueOf() - n1.date.valueOf());
     document.getElementById("e3ext-news-loading-svg-container")!.style.display = "none";
-    news.forEach((news1) => {
+    allNews.forEach((news1) => {
         const { course, title, date, link } = news1;
         const dateStr = date.format("MM/DD HH:mm");
         const tr = document.createElement("tr");
@@ -248,13 +249,13 @@ function swapCourseListPos() {
 
     buttons.forEach((button) => {
         const newBtn = button.cloneNode(true) as HTMLDivElement;
-        const captionEl = newBtn.querySelector('.btn2018_sp_caption');
-        if (captionEl === null || captionEl.textContent === null) {
+        const btnCaptionEl = newBtn.querySelector(".btn2018_sp_caption");
+        if (btnCaptionEl === null || btnCaptionEl.textContent === null) {
             console.error(".btn2018_sp_caption is null");
             return;
         }
-        if (captionEl.textContent.replace(/\s/g, "") === "當期課程") {
-            captionEl.textContent = "公告";
+        if (btnCaptionEl.textContent.replace(/\s/g, "") === "當期課程") {
+            btnCaptionEl.textContent = "公告";
         }
         container.appendChild(newBtn);
     });
