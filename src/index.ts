@@ -310,29 +310,29 @@ function fetchEventStatus() {
     }
 
     const makePromises = () => {
-        const event_items = document.querySelectorAll("aside[data-block='dcpc_events'] .BarCard > .BarCard-item");
+        const eventItems = document.querySelectorAll("aside[data-block='dcpc_events'] .BarCard > .BarCard-item");
         const promises: Promise<string | null>[] = []; // return string if event is done
-        const done_events_cached = JSON.parse(localStorage.getItem('done_events') || '[]');
+        const doneEventsCached = JSON.parse(localStorage.getItem('done_events') || '[]');
 
-        event_items.forEach(item => {
-            const event_link = item.querySelector('a');
-            const event_course = item.querySelector('small');
-            const event_name = event_link!.text + event_course!.textContent;
+        eventItems.forEach(item => {
+            const eventLink = item.querySelector('a');
+            const eventCourse = item.querySelector('small');
+            const eventName = eventLink!.text + eventCourse!.textContent;
 
-            if (done_events_cached.includes(event_name)) {
+            if (doneEventsCached.includes(eventName)) {
                 setEventFinished(item);
             }
 
             promises.push((async () => {
-                const res = await fetch(event_link!.href)
+                const res = await fetch(eventLink!.href)
                 const data = await res.text();
-                const event_details = new DOMParser().parseFromString(data, "text/html");
-                const submit = event_details.getElementsByClassName('submissionstatussubmitted');
+                const eventDetails = new DOMParser().parseFromString(data, "text/html");
+                const submit = eventDetails.getElementsByClassName('submissionstatussubmitted');
                 if (submit.length > 0) {
                     if (!item.classList.contains('del')) {
                         setEventFinished(item);
                     }
-                    return event_name;
+                    return eventName;
                 }
                 else {
                     setEventUnfinished(item);
@@ -345,8 +345,8 @@ function fetchEventStatus() {
 
     Promise.all(makePromises())
         .then(responses => {
-            const done_events = responses.filter(r => r !== null);
-            localStorage.setItem('done_events', JSON.stringify(done_events));
+            const doneEvents = responses.filter(r => r !== null);
+            localStorage.setItem('done_events', JSON.stringify(doneEvents));
         })
 }
 
