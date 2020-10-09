@@ -296,28 +296,62 @@ function fetchCal(e: MouseEvent) {
 }
 
 function fetchEventStatus() {
-    const event_items = document.querySelectorAll("aside[data-block='dcpc_events'] .BarCard > .BarCard-item");
-    event_items.forEach(item => {
-        const event_link = item.querySelector('a');
-        if (event_link) {
-            fetch(event_link.href).then(res => {
-                res.text().then((data) => {
-                    const event_details = new DOMParser().parseFromString(data, "text/html");
-                    const submit = event_details.getElementsByClassName('submissionstatussubmitted');
-                    if (submit.length > 0) {
-                        item.classList.add('del');
-                        const icons = item.getElementsByClassName('icon');
-                        for (let i = 0; i < icons.length; i++) {
-                            icons[i].setAttribute('style', 'visibility: hidden');
-                        }
-                        if (item.parentNode) {
-                            item.parentNode.appendChild(item);
-                        }
-                    }
-                })
-            })
-        }
-    })
+    const setEventFinished = (item: Element) => {
+        item.classList.add('del');
+        const icon = item.querySelector('img.icon');
+        icon?.setAttribute('style', 'visibility: hidden');
+        item.parentNode?.appendChild(item);
+    }
+
+    const setEventUnfinished = (item: Element) => {
+        item.classList.remove('del');
+        const icon = item.querySelector('img.icon');
+        icon?.setAttribute('style', '');
+    }
+
+    const makePromises = () => {
+        const event_items = document.querySelectorAll("aside[data-block='dcpc_events'] .BarCard > .BarCard-item");
+        const promises: Promise<string | null>[] = []; // return string if event is done
+        const done_events_cached = JSON.parse(localStorage.getItem('done_events') || '[]');
+
+        event_items.forEach(item => {
+            const event_link = item.querySelector('a');
+            const event_course = item.querySelector('small');
+            const event_name = event_link!.text + event_course!.textContent;
+
+            if (done_events_cached.includes(event_name)) {
+                setEventFinished(item);
+            }
+
+            promises.push(
+                fetch(event_link!.href)
+                    .then(async (res) => {
+                        return res.text()
+                            .then((data) => {
+                                const event_details = new DOMParser().parseFromString(data, "text/html");
+                                const submit = event_details.getElementsByClassName('submissionstatussubmitted');
+                                if (submit.length > 0) {
+                                    if (!item.classList.contains('del')) {
+                                        setEventFinished(item);
+                                    }
+                                    return event_name;
+                                }
+                                else {
+                                    setEventUnfinished(item);
+                                    return null;
+                                }
+                            })
+                    })
+            );
+        })
+        return promises;
+    }
+
+    Promise.all(makePromises())
+        .then(responses => {
+            const done_events = responses.filter(r => r !== null);
+            localStorage.setItem('done_events', JSON.stringify(done_events));
+        })
 }
 
 swapCourseListPos();
