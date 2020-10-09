@@ -323,26 +323,22 @@ function fetchEventStatus() {
                 setEventFinished(item);
             }
 
-            promises.push(
-                fetch(event_link!.href)
-                    .then(async (res) => {
-                        return res.text()
-                            .then((data) => {
-                                const event_details = new DOMParser().parseFromString(data, "text/html");
-                                const submit = event_details.getElementsByClassName('submissionstatussubmitted');
-                                if (submit.length > 0) {
-                                    if (!item.classList.contains('del')) {
-                                        setEventFinished(item);
-                                    }
-                                    return event_name;
-                                }
-                                else {
-                                    setEventUnfinished(item);
-                                    return null;
-                                }
-                            })
-                    })
-            );
+            promises.push((async () => {
+                const res = await fetch(event_link!.href)
+                const data = await res.text();
+                const event_details = new DOMParser().parseFromString(data, "text/html");
+                const submit = event_details.getElementsByClassName('submissionstatussubmitted');
+                if (submit.length > 0) {
+                    if (!item.classList.contains('del')) {
+                        setEventFinished(item);
+                    }
+                    return event_name;
+                }
+                else {
+                    setEventUnfinished(item);
+                    return null;
+                }
+            })());
         })
         return promises;
     }
