@@ -280,3 +280,8 @@ from { transform: translateY(15%); }
 .micromodal-slide .modal__overlay {
     will-change: transform;
 }
+
+aside[data-block="dcpc_events"] .BarCard-item.del a,
+aside[data-block="dcpc_events"] .BarCard-item.del small {
+    color: lightgray !important;
+}

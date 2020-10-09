@@ -295,6 +295,32 @@ function fetchCal(e: MouseEvent) {
     });
 }
 
+function fetchEventStatus() {
+    const event_items = document.querySelectorAll("aside[data-block='dcpc_events'] .BarCard > .BarCard-item");
+    event_items.forEach(item => {
+        const event_link = item.querySelector('a');
+        if (event_link) {
+            fetch(event_link.href).then(res => {
+                res.text().then((data) => {
+                    const event_details = new DOMParser().parseFromString(data, "text/html");
+                    const submit = event_details.getElementsByClassName('submissionstatussubmitted');
+                    if (submit.length > 0) {
+                        item.classList.add('del');
+                        const icons = item.getElementsByClassName('icon');
+                        for (let i = 0; i < icons.length; i++) {
+                            icons[i].setAttribute('style', 'visibility: hidden');
+                        }
+                        if (item.parentNode) {
+                            item.parentNode.appendChild(item);
+                        }
+                    }
+                })
+            })
+        }
+    })
+}
+
 swapCourseListPos();
 fetchNews();
+fetchEventStatus();
 setUpAJAXCal();
