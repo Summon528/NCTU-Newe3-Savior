@@ -20,7 +20,7 @@ chrome.webRequest.onHeadersReceived.addListener(
     ) {
       for (const header of details.responseHeaders) {
         if (
-          header.name === 'Location' &&
+          header.name.toLowerCase() === 'location' &&
           header.value &&
           new URL(header.value).pathname === '/login/index.php'
         ) {
