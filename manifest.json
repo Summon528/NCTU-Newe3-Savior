@@ -1,54 +1,31 @@
 {
-    "name": "NCTU 新e3救星",
-    "short_name": "NCTU Newe3 Savior",
-    "version": "1.9.0",
-    "description": "Make New e3 great again",
-    "manifest_version": 2,
-    "web_accessible_resources": [
-        "dist/loading.svg"
-    ],
-    "icons": {
-        "128": "icon.png"
+  "name": "NCTU 新e3救星",
+  "short_name": "NCTU Newe3 Savior",
+  "version": "1.10.0",
+  "description": "Make New e3 great again",
+  "manifest_version": 2,
+  "web_accessible_resources": ["dist/loading.svg"],
+  "icons": {
+    "128": "icon.png"
+  },
+  "permissions": ["webRequest", "webRequestBlocking", "cookies", "https://e3new.nctu.edu.tw/*"],
+  "background": {
+    "scripts": ["dist/background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://e3new.nctu.edu.tw/*"],
+      "js": ["dist/hide_loading.js"],
+      "run_at": "document_start"
     },
-    "permissions": [
-        "webRequest",
-        "webRequestBlocking",
-        "cookies",
-        "https://e3new.nctu.edu.tw/*"
-    ],
-    "background": {
-        "scripts": [
-            "dist/background.js"
-        ]
+    {
+      "matches": ["https://e3new.nctu.edu.tw/my/*"],
+      "js": ["dist/index.js"],
+      "css": ["dist/index.css"]
     },
-    "content_scripts": [
-        {
-            "matches": [
-                "https://e3new.nctu.edu.tw/*"
-            ],
-            "js": [
-                "dist/hide_loading.js"
-            ],
-            "run_at": "document_start"
-        },
-        {
-            "matches": [
-                "https://e3new.nctu.edu.tw/my/*"
-            ],
-            "js": [
-                "dist/index.js"
-            ],
-            "css": [
-                "dist/index.css"
-            ]
-        },
-        {
-            "matches": [
-                "https://e3new.nctu.edu.tw/login/*"
-            ],
-            "css": [
-                "dist/login.css"
-            ]
-        }
-    ]
+    {
+      "matches": ["https://e3new.nctu.edu.tw/login/*"],
+      "css": ["dist/login.css"]
+    }
+  ]
 }
